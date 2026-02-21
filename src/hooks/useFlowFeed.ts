@@ -33,6 +33,7 @@ interface UseFlowFeedResult {
     lastUpdated: Date | null;
     refreshing: boolean;
     refresh: () => Promise<void>;
+    sendMessage: (msg: any) => void;
 }
 
 const RECONNECT_DELAY_MS = 5_000;
@@ -48,6 +49,14 @@ export const useFlowFeed = (): UseFlowFeedResult => {
     const reconnectAttempts = useRef(0);
     const reconnectTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const isMounted = useRef(true);
+
+    const sendMessage = useCallback((msg: any) => {
+        if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+            wsRef.current.send(JSON.stringify(msg));
+        } else {
+            console.warn('[ws] Cannot send message: Not connected');
+        }
+    }, []);
 
     const connect = useCallback(() => {
         if (!isMounted.current) return;
@@ -122,5 +131,5 @@ export const useFlowFeed = (): UseFlowFeedResult => {
         };
     }, [connect]);
 
-    return { trades, connected, lastUpdated, refreshing, refresh };
+    return { trades, connected, lastUpdated, refreshing, refresh, sendMessage };
 };

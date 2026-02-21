@@ -5,9 +5,8 @@
  * No API keys are stored in the app.
  */
 
-// Update this to your deployed Railway/Render URL in production
-
 import { Platform } from 'react-native';
+import { ChartRange } from '../components/PriceChart';
 
 const SERVER_URL = __DEV__
     ? Platform.OS === 'android'
@@ -29,6 +28,10 @@ const apiFetch = async (path: string) => {
 export const fetchStockPrice = (ticker: string) =>
     apiFetch(`/api/quote/${ticker.trim().toUpperCase()}`);
 
+/** Fetches daily OHLC bars for the given range (1W / 1M / 3M). */
+export const fetchPriceHistory = (ticker: string, range: ChartRange) =>
+    apiFetch(`/api/history/${ticker.trim().toUpperCase()}?range=${range}`);
+
 export const fetchOptionsExpirations = (ticker: string): Promise<string[]> =>
     apiFetch(`/api/options/expirations/${ticker.trim().toUpperCase()}`);
 
@@ -36,9 +39,10 @@ export const fetchOptionChain = (ticker: string, expiration: string) =>
     apiFetch(`/api/options/chain/${ticker.trim().toUpperCase()}/${expiration}`);
 
 export const searchSymbols = (query: string) =>
-    query.length >= 2 ? apiFetch(`/api/search?q=${encodeURIComponent(query)}`) : Promise.resolve([]);
+    query.length >= 2
+        ? apiFetch(`/api/search?q=${encodeURIComponent(query)}`)
+        : Promise.resolve([]);
 
-// One-shot flow scan (used by pull-to-refresh as a fallback)
 export const fetchUnusualFlow = (tickers?: string[]) => {
     const params = tickers ? `?tickers=${tickers.join(',')}` : '';
     return apiFetch(`/api/flow${params}`);

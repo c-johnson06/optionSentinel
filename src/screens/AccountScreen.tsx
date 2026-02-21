@@ -174,7 +174,9 @@ const styles = StyleSheet.create({
     },
     scrollContent: {
         paddingHorizontal: 24,
-        paddingVertical: 24,
+        paddingTop: 24,
+        // Tab bar: height 72 + bottom 24 = 96px clearance needed; 120px gives comfortable breathing room
+        paddingBottom: 120,
     },
     center: {
         flex: 1,
