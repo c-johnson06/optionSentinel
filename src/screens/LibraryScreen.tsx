@@ -16,9 +16,9 @@ const LibraryScreen = ({ navigation }: any) => {
     const { watchlist, addTicker, removeTicker } = useWatchlist();
     const [newTicker, setNewTicker] = useState('');
 
-    const handleAddTicker = () => {
+    const handleAddTicker = async () => {
         if (!newTicker) return;
-        const added = addTicker(newTicker);
+        const added = await addTicker(newTicker);
         if (added) {
             setNewTicker('');
         } else {
@@ -41,6 +41,8 @@ const LibraryScreen = ({ navigation }: any) => {
                     value={newTicker}
                     onChangeText={setNewTicker}
                     autoCapitalize="characters"
+                    onSubmitEditing={handleAddTicker}
+                    returnKeyType="done"
                 />
                 <TouchableOpacity style={styles.addButton} onPress={handleAddTicker}>
                     <Text style={styles.addButtonText}>Add</Text>
@@ -57,13 +59,13 @@ const LibraryScreen = ({ navigation }: any) => {
                             <Text style={styles.alertStatus}>🔔 Alerts ON</Text>
                         </View>
                         <View style={styles.cardActions}>
-                            <TouchableOpacity 
+                            <TouchableOpacity
                                 style={styles.viewButton}
                                 onPress={() => navigation.navigate('TradeDetail', { ticker: item })}
                             >
                                 <Eye size={18} color="#f9fafb" />
                             </TouchableOpacity>
-                            <TouchableOpacity 
+                            <TouchableOpacity
                                 style={styles.removeButton}
                                 onPress={() => removeTicker(item)}
                             >

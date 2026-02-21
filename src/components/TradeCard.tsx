@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { TrendingUp, TrendingDown } from 'lucide-react-native';
-import { OptionsTrade } from '../types';
 
 interface TradeCardProps {
     trade: any;
@@ -88,6 +87,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 8,
         paddingVertical: 2,
         borderRadius: 6,
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     sentimentText: {
         fontSize: 10,

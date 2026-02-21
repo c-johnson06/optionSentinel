@@ -207,7 +207,10 @@ app.get('/api/flow', async (req, res) => {
             ? req.query.tickers.split(',')
             : FEED_TICKERS;
 
-        const results = await Promise.all(tickers.map(scanTicker));
+        const settled = await Promise.allSettled(FEED_TICKERS.map(scanTicker));
+        const results = settled
+            .filter(r => r.status === 'fulfilled')
+            .map(r => r.value);
         const flow = results.flat().sort((a, b) => b.score - a.score);
 
         res.json(flow);

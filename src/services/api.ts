@@ -6,8 +6,13 @@
  */
 
 // Update this to your deployed Railway/Render URL in production
+
+import { Platform } from 'react-native';
+
 const SERVER_URL = __DEV__
-    ? 'http://10.0.2.2:3000'
+    ? Platform.OS === 'android'
+        ? 'http://10.0.2.2:3000'
+        : 'http://localhost:3000'
     : 'https://your-deployed-server.up.railway.app';
 
 export const WS_URL = SERVER_URL.replace('http', 'ws');
